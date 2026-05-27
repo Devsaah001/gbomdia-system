@@ -1,0 +1,38 @@
+{% extends "base_dashboard.html" %}
+{% block title %}My Activities | GBOMDIA{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div class="title-box">
+        <h1>My Daily Activities</h1>
+        <p>Review the services and daily office activities you have recorded.</p>
+    </div>
+
+    <div class="actions">
+        <a href="{% url 'operator_dashboard' %}" class="action-btn">Dashboard</a>
+        <a href="{% url 'record_service' %}" class="action-btn primary">Record New Service</a>
+    </div>
+</div>
+
+<div class="panel">
+    <h2>Activity Records</h2>
+
+    {% for item in activities %}
+        <div class="activity-item">
+            <div class="activity-title">
+                {{ item.get_action_display }}{% if item.customer_name %} - {{ item.customer_name }}{% endif %}
+            </div>
+            <div class="activity-meta">
+                Service: {{ item.get_service_type_display }} |
+                Status: {{ item.get_status_display }} |
+                Phone: {{ item.customer_phone|default:"N/A" }} |
+                Amount: {{ item.amount }} |
+                Ref: {{ item.reference|default:"N/A" }} |
+                {{ item.created_at }}
+            </div>
+        </div>
+    {% empty %}
+        <p>No activities recorded yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

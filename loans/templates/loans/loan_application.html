@@ -1,0 +1,517 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Loan Application - GBOMDIA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        :root {
+            --green-dark: #0f7a43;
+            --green: #16b86a;
+            --green-soft: #34b79f;
+            --blue: #114c8d;
+            --cream: #f8f6ef;
+            --text: #163127;
+            --muted: #5f7468;
+            --white: #ffffff;
+            --shadow: 0 18px 40px rgba(0,0,0,0.10);
+            --card-shadow: 0 12px 28px rgba(0,0,0,0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(22,184,106,0.10), transparent 25%),
+                radial-gradient(circle at bottom right, rgba(17,76,141,0.08), transparent 30%),
+                linear-gradient(180deg, #eef7f1 0%, #f8fbf8 100%);
+            color: var(--text);
+        }
+
+        .form-shell {
+            display: flex;
+            justify-content: center;
+            padding: 30px 12px 50px;
+        }
+
+        .form-card {
+            position: relative;
+            width: 100%;
+            max-width: 1080px;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid rgba(15,122,67,0.08);
+        }
+
+        .form-watermark {
+            position: absolute;
+            inset: 0;
+            background: url("{% static 'images/logo.png' %}") center center / 260px no-repeat;
+            opacity: 0.045;
+            pointer-events: none;
+        }
+
+        .form-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .top-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 18px;
+            text-decoration: none;
+            color: var(--green-dark);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .header-box {
+            background: linear-gradient(135deg, var(--green) 0%, var(--green-soft) 45%, var(--blue) 100%);
+            color: var(--cream);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .header-box h1 {
+            margin: 0 0 10px;
+            font-size: 34px;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+        }
+
+        .header-box p {
+            margin: 0;
+            color: rgba(248,246,239,0.95);
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .success {
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: rgba(22,184,106,0.12);
+            color: var(--green-dark);
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .section-box {
+            background: linear-gradient(180deg, #ffffff 0%, #f7fbf8 100%);
+            border: 1px solid rgba(15,122,67,0.08);
+            border-radius: 24px;
+            padding: 22px;
+            margin-bottom: 22px;
+            box-shadow: var(--card-shadow);
+        }
+
+        h2 {
+            margin: 0 0 18px;
+            font-size: 21px;
+            color: var(--green-dark);
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(15,122,67,0.08);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 13px 14px;
+            border-radius: 14px;
+            border: 1px solid #cbd5e1;
+            font-size: 15px;
+            background: white;
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 4px rgba(22,184,106,0.10);
+        }
+
+        input[type="file"] {
+            padding: 10px;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .error {
+            color: #b91c1c;
+            margin-top: 6px;
+            font-size: 13px;
+        }
+
+        .terms-box {
+            max-height: 190px;
+            overflow-y: auto;
+            background: rgba(248, 251, 248, 0.9);
+            border: 1px solid rgba(15,122,67,0.08);
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .terms-box p {
+            margin: 0 0 14px;
+            color: var(--muted);
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .terms-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        .terms-check input {
+            width: auto;
+            margin-top: 4px;
+        }
+
+        .submit-row {
+            margin-top: 28px;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        button {
+            padding: 14px 22px;
+            background: linear-gradient(135deg, var(--green), var(--blue));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            box-shadow: 0 10px 22px rgba(17,76,141,0.14);
+            transition: 0.25s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 700px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+
+            .form-card {
+                padding: 18px;
+                border-radius: 22px;
+            }
+
+            .header-box h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="form-shell">
+    <div class="form-card">
+        <div class="form-watermark"></div>
+
+        <div class="form-content">
+            {% if request.user.role == "customer" %}
+                <a href="{% url 'customer_dashboard' %}" class="top-link">← Back to Customer Dashboard</a>
+            {% elif request.user.role == "operator" %}
+                <a href="{% url 'operator_dashboard' %}" class="top-link">← Back to Operator Dashboard</a>
+            {% elif request.user.role == "admin" %}
+                <a href="{% url 'admin_dashboard' %}" class="top-link">← Back to Admin Dashboard</a>
+            {% elif request.user.role == "management" %}
+                <a href="{% url 'management_dashboard' %}" class="top-link">← Back to Management Dashboard</a>
+            {% else %}
+                <a href="{% url 'home' %}" class="top-link">← Back to Home</a>
+            {% endif %}
+
+            <div class="header-box">
+                <h1>Online Loan Application</h1>
+                <p>Complete the form below to submit your loan request to GBOMDIA. Interest is calculated at 15% per month.</p>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="success">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="section-box">
+                    <h2>Applicant Information</h2>
+                    <div class="grid">
+                        <div>
+                            <label>{{ form.first_name.label }}</label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}<div class="error">{{ form.first_name.errors }}</div>{% endif %}
+                        </div>
+
+                        <div>
+                            <label>{{ form.last_name.label }}</label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}<div class="error">{{ form.last_name.errors }}</div>{% endif %}
+                        </div>
+
+                        <div>
+                            <label>{{ form.phone.label }}</label>
+                            {{ form.phone }}
+                            {% if form.phone.errors %}<div class="error">{{ form.phone.errors }}</div>{% endif %}
+                        </div>
+
+                        <div>
+                            <label>{{ form.email.label }}</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}<div class="error">{{ form.email.errors }}</div>{% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <h2>KYC Information</h2>
+                    <div class="grid">
+                        <div class="full">
+                            <label>{{ form.address.label }}</label>
+                            {{ form.address }}
+                            {% if form.address.errors %}<div class="error">{{ form.address.errors }}</div>{% endif %}
+                        </div>
+
+                        <div>
+                            <label>{{ form.occupation.label }}</label>
+                            {{ form.occupation }}
+                            {% if form.occupation.errors %}<div class="error">{{ form.occupation.errors }}</div>{% endif %}
+                        </div>
+
+                        <div>
+                            <label>{{ form.employment_status.label }}</label>
+                            {{ form.employment_status }}
+                            {% if form.employment_status.errors %}<div class="error">{{ form.employment_status.errors }}</div>{% endif %}
+                        </div>
+
+                        <div>
+                            <label>{{ form.employer_or_business_name.label }}</label>
+                            {{ form.employer_or_business_name }}
+                            {% if form.employer_or_business_name.errors %}<div class="error">{{ form.employer_or_business_name.errors }}</div>{% endif %}
+                        </div>
+
+                        <div>
+                            <label>{{ form.monthly_income.label }}</label>
+                            {{ form.monthly_income }}
+                            {% if form.monthly_income.errors %}<div class="error">{{ form.monthly_income.errors }}</div>{% endif %}
+                        </div>
+
+                        <div>
+                            <label>{{ form.id_type.label }}</label>
+                            {{ form.id_type }}
+                            {% if form.id_type.errors %}<div class="error">{{ form.id_type.errors }}</div>{% endif %}
+                        </div>
+
+                        <div>
+                            <label>{{ form.id_number.label }}</label>
+                            {{ form.id_number }}
+                            {% if form.id_number.errors %}<div class="error">{{ form.id_number.errors }}</div>{% endif %}
+                        </div>
+
+                        <div>
+                            <label>{{ form.applicant_photo.label }}</label>
+                            {{ form.applicant_photo }}
+                            {% if form.applicant_photo.errors %}<div class="error">{{ form.applicant_photo.errors }}</div>{% endif %}
+                        </div>
+
+                        <div>
+                            <label>{{ form.id_document_photo.label }}</label>
+                            {{ form.id_document_photo }}
+                            {% if form.id_document_photo.errors %}<div class="error">{{ form.id_document_photo.errors }}</div>{% endif %}
+                        </div>
+
+                        <div>
+                            <label>{{ form.collateral_document.label }}</label>
+                            {{ form.collateral_document }}
+                            {% if form.collateral_document.errors %}<div class="error">{{ form.collateral_document.errors }}</div>{% endif %}
+                        </div>
+
+                        <div class="full">
+                            <label>{{ form.collateral_description.label }}</label>
+                            {{ form.collateral_description }}
+                            {% if form.collateral_description.errors %}<div class="error">{{ form.collateral_description.errors }}</div>{% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <h2>Loan Details</h2>
+                    <div class="grid">
+                        <div>
+                            <label>{{ form.amount_requested.label }}</label>
+                            {{ form.amount_requested }}
+                            {% if form.amount_requested.errors %}<div class="error">{{ form.amount_requested.errors }}</div>{% endif %}
+                        </div>
+
+                        <div>
+                            <label>{{ form.duration_months.label }}</label>
+                            {{ form.duration_months }}
+                            {% if form.duration_months.errors %}<div class="error">{{ form.duration_months.errors }}</div>{% endif %}
+                        </div>
+
+                        <div>
+                            <label>{{ form.interest_rate.label }}</label>
+                            {{ form.interest_rate }}
+                            {% if form.interest_rate.errors %}<div class="error">{{ form.interest_rate.errors }}</div>{% endif %}
+                        </div>
+
+                        <div class="full">
+                            <label>{{ form.purpose.label }}</label>
+                            {{ form.purpose }}
+                            {% if form.purpose.errors %}<div class="error">{{ form.purpose.errors }}</div>{% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <h2>Guarantor 1</h2>
+                    <div class="grid">
+                        <div>
+                            <label>{{ form.guarantor1_full_name.label }}</label>
+                            {{ form.guarantor1_full_name }}
+                        </div>
+
+                        <div>
+                            <label>{{ form.guarantor1_phone.label }}</label>
+                            {{ form.guarantor1_phone }}
+                        </div>
+
+                        <div>
+                            <label>{{ form.guarantor1_occupation.label }}</label>
+                            {{ form.guarantor1_occupation }}
+                        </div>
+
+                        <div>
+                            <label>{{ form.guarantor1_relationship.label }}</label>
+                            {{ form.guarantor1_relationship }}
+                        </div>
+
+                        <div class="full">
+                            <label>{{ form.guarantor1_address.label }}</label>
+                            {{ form.guarantor1_address }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <h2>Guarantor 2</h2>
+                    <div class="grid">
+                        <div>
+                            <label>{{ form.guarantor2_full_name.label }}</label>
+                            {{ form.guarantor2_full_name }}
+                        </div>
+
+                        <div>
+                            <label>{{ form.guarantor2_phone.label }}</label>
+                            {{ form.guarantor2_phone }}
+                        </div>
+
+                        <div>
+                            <label>{{ form.guarantor2_occupation.label }}</label>
+                            {{ form.guarantor2_occupation }}
+                        </div>
+
+                        <div>
+                            <label>{{ form.guarantor2_relationship.label }}</label>
+                            {{ form.guarantor2_relationship }}
+                        </div>
+
+                        <div class="full">
+                            <label>{{ form.guarantor2_address.label }}</label>
+                            {{ form.guarantor2_address }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                     <h2>Terms and Conditions</h2>
+
+    <div class="terms-box">
+        <p>
+            A. I agree to pay the loan on time, with all associated costs; otherwise,
+            I will be liable to pay a penalty of 25% on the amount due if payment is made
+            after the due date. If payment is 15 days late, I will be charged 12.5% additional.
+            If more than two months late, the entire loan shall become due and payable as charged.
+        </p>
+
+        <p>
+            B. I am aware that I need to respond truthfully to all information requested herein
+            and that any misinformation may render my disqualification. Legal action may be taken
+            against me if deemed necessary by GBOM-DIA Enterprise Inc.
+        </p>
+
+        <p>
+            C. Upon my failure to make good the loan on time, GBOM-DIA shall have the right
+            to recover from me any additional cost incurred, whether through peace officers,
+            court precept, or retained counsel to recover the amount due.
+        </p>
+
+        <p>
+            D. I am aware that the loan guarantor or guarantors I have presented for this loan
+            is or are trustworthy and has/have the financial capability to make full settlement
+            or restitution to GBOM-DIA Enterprise Inc.
+        </p>
+    </div>
+
+    <label class="terms-check">
+        <input type="checkbox" name="agree_terms" required>
+        I have read and agreed to the GBOM-DIA loan terms and conditions.
+    </label>
+ </div>
+                <div class="submit-row">
+                    <button type="submit">Submit Application</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

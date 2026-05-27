@@ -1,0 +1,62 @@
+{% extends "base_dashboard.html" %}
+{% block title %}My Susu | GBOMDIA{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div class="title-box">
+        <h1>My Susu</h1>
+        <p>View your Susu savings accounts, balances, and application status.</p>
+    </div>
+
+    <div class="actions">
+        <a href="{% url 'customer_dashboard' %}" class="action-btn">Dashboard</a>
+        <a href="{% url 'apply_susu' %}" class="action-btn primary">Apply New Susu</a>
+    </div>
+</div>
+
+<div class="panel">
+    <h2>Susu Records</h2>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Account Number</th>
+                    <th>Plan</th>
+                    <th>Contribution</th>
+                    <th>Balance</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for susu in susu_accounts %}
+                    <tr>
+                        <td>{{ susu.account_number|default:"Pending" }}</td>
+                        <td>{{ susu.plan_name }}</td>
+                        <td>{{ susu.contribution_amount }}</td>
+                        <td>{{ susu.balance }}</td>
+                        <td>
+                            {% if susu.status == 'pending' %}
+                                <span class="badge pending">Pending</span>
+                            {% elif susu.status == 'active' %}
+                                <span class="badge active">Active</span>
+                            {% elif susu.status == 'rejected' %}
+                                <span class="badge rejected">Rejected</span>
+                            {% else %}
+                                <span class="badge">{{ susu.status|title }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ susu.created_at }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6">You have no Susu account yet.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

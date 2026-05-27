@@ -1,0 +1,84 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Manage Susu | GBOMDIA{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div class="title-box">
+        <h1>Manage Susu Accounts</h1>
+        <p>Review Susu applications, approve accounts, and monitor savings records.</p>
+    </div>
+
+    <div class="actions">
+        {% if request.user.role == 'admin' %}
+            <a href="{% url 'admin_dashboard' %}" class="action-btn primary">Back to Admin</a>
+        {% elif request.user.role == 'management' %}
+            <a href="{% url 'management_dashboard' %}" class="action-btn primary">Back to Management</a>
+        {% elif request.user.role == 'operator' %}
+            <a href="{% url 'operator_dashboard' %}" class="action-btn primary">Back to Operator</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="panel">
+    <h2>Susu Account Directory</h2>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Account No.</th>
+                    <th>Plan</th>
+                    <th>Contribution</th>
+                    <th>Balance</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for susu in susu_accounts %}
+                    <tr>
+                        <td>{{ susu.customer }}</td>
+                        <td>{{ susu.account_number|default:"Pending" }}</td>
+                        <td>{{ susu.plan_name }}</td>
+                        <td>{{ susu.contribution_amount }}</td>
+                        <td>{{ susu.balance }}</td>
+                        <td>
+                            {% if susu.status == 'pending' %}
+                                <span class="badge pending">Pending</span>
+                            {% elif susu.status == 'active' %}
+                                <span class="badge active">Active</span>
+                            {% elif susu.status == 'rejected' %}
+                                <span class="badge rejected">Rejected</span>
+                            {% else %}
+                                <span class="badge">{{ susu.status|title }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ susu.created_at }}</td>
+                        <td>
+                            <div class="actions">
+                                {% if request.user.role == 'admin' or request.user.role == 'management' %}
+                                    {% if susu.status == 'pending' %}
+                                        <a href="{% url 'approve_susu' susu.id %}" class="action-btn primary">Approve</a>
+                                        <a href="{% url 'reject_susu' susu.id %}" class="action-btn">Reject</a>
+                                    {% else %}
+                                        <span class="activity-meta">No action</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="activity-meta">View only</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="8">No Susu accounts found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

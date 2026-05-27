@@ -1,0 +1,45 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Reports | GBOMDIA{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div class="title-box">
+        <h1>Reports Center</h1>
+        <p>Business reports, summaries, and operational insights will be managed here.</p>
+    </div>
+
+    <div class="actions">
+        <a href="{% url 'admin_dashboard' %}" class="action-btn primary">Back to Admin</a>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3>Loan Reports</h3>
+        <p>Ready</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Susu Reports</h3>
+        <p>Ready</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Activity Reports</h3>
+        <p>Ready</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Inventory Reports</h3>
+        <p>Ready</p>
+    </div>
+</div>
+
+<div class="panel">
+    <h2>Report Notice</h2>
+    <p>
+        This section is prepared for expanded reporting. Admin can review loans, Susu,
+        customer records, activity logs, inventory, and payout information from the system.
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Close Daily Cash | GBOMDIA{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div class="title-box">
+        <h1>Close Daily Business Cash</h1>
+        <p>Enter today’s income, expense, and closing amount to calculate daily profit and balance.</p>
+    </div>
+</div>
+
+<div class="panel">
+    <h2>Daily Closing Form</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <p><strong>Opening Amount:</strong> {{ cash.opening_amount }}</p>
+
+        <div class="quick-links">
+            <div class="quick-link">
+                <strong>Total Income</strong>
+                <input type="number" step="0.01" name="total_income" required>
+            </div>
+
+            <div class="quick-link">
+                <strong>Total Expense</strong>
+                <input type="number" step="0.01" name="total_expense" required>
+            </div>
+
+            <div class="quick-link">
+                <strong>Closing Amount</strong>
+                <input type="number" step="0.01" name="closing_amount" required>
+            </div>
+        </div>
+
+        <div style="margin-top:22px;">
+            <button type="submit" class="action-btn primary" style="border:none; cursor:pointer;">
+                Save Daily Report
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

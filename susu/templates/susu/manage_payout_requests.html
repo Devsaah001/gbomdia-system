@@ -1,0 +1,80 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Payout Requests | GBOMDIA{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div class="title-box">
+        <h1>Susu Payout Requests</h1>
+        <p>Review and manage payout requests from Susu customers.</p>
+    </div>
+
+    <div class="actions">
+        {% if request.user.role == 'admin' %}
+            <a href="{% url 'admin_dashboard' %}" class="action-btn primary">Back to Admin</a>
+        {% elif request.user.role == 'management' %}
+            <a href="{% url 'management_dashboard' %}" class="action-btn primary">Back to Management</a>
+        {% elif request.user.role == 'operator' %}
+            <a href="{% url 'operator_dashboard' %}" class="action-btn primary">Back to Operator</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="panel">
+    <h2>Payout Directory</h2>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Account</th>
+                    <th>Requested Amount</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for payout in payout_requests %}
+                    <tr>
+                        <td>{{ payout.susu_account.customer }}</td>
+                        <td>{{ payout.susu_account.account_number }}</td>
+                        <td>{{ payout.requested_amount }}</td>
+                        <td>{{ payout.reason|default:"N/A" }}</td>
+                        <td>
+                            {% if payout.status == 'pending' %}
+                                <span class="badge pending">Pending</span>
+                            {% elif payout.status == 'approved' %}
+                                <span class="badge approved">Approved</span>
+                            {% elif payout.status == 'rejected' %}
+                                <span class="badge rejected">Rejected</span>
+                            {% else %}
+                                <span class="badge">{{ payout.status|title }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ payout.created_at }}</td>
+                        <td>
+                            {% if request.user.role == 'admin' or request.user.role == 'management' %}
+                                {% if payout.status == 'pending' %}
+                                    <a href="{% url 'approve_payout_request' payout.id %}" class="action-btn primary">Approve</a>
+                                    <a href="{% url 'reject_payout_request' payout.id %}" class="action-btn">Reject</a>
+                                {% else %}
+                                    <span class="activity-meta">No action</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="activity-meta">View only</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7">No payout requests found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

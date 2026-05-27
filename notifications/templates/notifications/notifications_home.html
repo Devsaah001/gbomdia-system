@@ -1,0 +1,39 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Notifications | GBOMDIA{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div class="title-box">
+        <h1>Notifications</h1>
+        <p>View system notices, updates, and internal communication records.</p>
+    </div>
+
+    <div class="actions">
+        {% if request.user.role == 'admin' %}
+            <a href="{% url 'admin_dashboard' %}" class="action-btn primary">Back to Admin</a>
+        {% elif request.user.role == 'management' %}
+            <a href="{% url 'management_dashboard' %}" class="action-btn primary">Back to Management</a>
+        {% elif request.user.role == 'operator' %}
+            <a href="{% url 'operator_dashboard' %}" class="action-btn primary">Back to Operator</a>
+        {% else %}
+            <a href="{% url 'customer_dashboard' %}" class="action-btn primary">Back to Dashboard</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="panel">
+    <h2>System Notifications</h2>
+
+    {% for notification in notifications %}
+        <div class="activity-item">
+            <div class="activity-title">{{ notification.title }}</div>
+            <div class="activity-meta">
+                {{ notification.message }} <br>
+                {{ notification.created_at }}
+            </div>
+        </div>
+    {% empty %}
+        <p>No notifications yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

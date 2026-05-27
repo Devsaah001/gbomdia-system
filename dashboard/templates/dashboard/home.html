@@ -1,0 +1,83 @@
+{% extends "base_website.html" %}
+{% load static %}
+{% block title %}GBOMDIA | Home{% endblock %}
+
+{% block content %}
+<section class="hero reveal">
+    <div class="hero-grid">
+        <div>
+            <span class="hero-badge">GBOMDIA Enterprise Inc.</span>
+            <h2>Digital business services built for trust, growth, and control.</h2>
+            <p>
+                GBOMDIA provides modern business support including LEC purchase, loans,
+                digital Susu, SIM registration, and forex exchange services.
+            </p>
+
+            <div class="hero-actions">
+                <a href="{% url 'signup_page' %}" class="btn btn-primary">Create Account</a>
+                <a href="{% url 'services_page' %}" class="btn btn-secondary">View Services</a>
+            </div>
+        </div>
+
+        <div class="hero-image">
+            <img src="{% static 'images/logo.png' %}" alt="GBOMDIA Logo">
+        </div>
+    </div>
+</section>
+
+<section class="section-card reveal">
+    <h2 class="section-title">Our Core Services</h2>
+    <p class="section-subtitle">
+        Simple, reliable, and organized services for customers and business operations.
+    </p>
+
+    <div class="grid-3">
+        <div class="feature-card">
+            <h3>LEC Purchase</h3>
+            <p>Support customers with electricity token and bill payment services.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>Loan Services</h3>
+            <p>Apply, review, manage, approve, and track customer loan applications.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>Digital Susu</h3>
+            <p>Manage savings accounts, deposits, payout requests, and customer savings records.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>SIM Registration</h3>
+            <p>Assist customers with SIM-related registration and telecom support.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>Forex Exchange</h3>
+            <p>Support currency exchange operations with proper service records.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>Customer Support</h3>
+            <p>Serve customers professionally through organized account and service support.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section-card reveal">
+    <div class="grid-2">
+        <div>
+            <h2 class="section-title">Built for accountability</h2>
+            <p class="section-subtitle">
+                The system supports customers, operators, management, and admin access
+                with organized dashboards for daily operations and decision making.
+            </p>
+            <a href="{% url 'login_page' %}" class="btn btn-primary">Login to System</a>
+        </div>
+
+        <div class="image-panel">
+            <img src="{% static 'images/logo.png' %}" alt="GBOMDIA Logo">
+        </div>
+    </div>
+</section>
+{% endblock %}

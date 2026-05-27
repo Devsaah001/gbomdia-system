@@ -1,0 +1,142 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Manage Loans | GBOMDIA{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div class="title-box">
+        <h1>Manage Loan Applications</h1>
+        <p>Review, search, and manage customer loan records professionally.</p>
+    </div>
+
+    <div class="actions">
+        {% if request.user.role == 'admin' %}
+            <a href="{% url 'admin_dashboard' %}" class="action-btn primary">Back to Admin Dashboard</a>
+        {% elif request.user.role == 'management' %}
+            <a href="{% url 'management_dashboard' %}" class="action-btn primary">Back to Management Dashboard</a>
+        {% elif request.user.role == 'operator' %}
+            <a href="{% url 'operator_dashboard' %}" class="action-btn primary">Back to Operator Dashboard</a>
+        {% else %}
+            <a href="{% url 'home' %}" class="action-btn primary">Back Home</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3>Total Loans</h3>
+        <p>{{ loans|length }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>Role Access</h3>
+        <p>{{ request.user.role|title }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>Workflow</h3>
+        <p>Loan</p>
+    </div>
+    <div class="stat-card">
+        <h3>Records</h3>
+        <p>Live</p>
+    </div>
+</div>
+
+<div class="panel">
+    <h2>Loan Directory</h2>
+    <p>Search customer, phone, amount, purpose, or status.</p>
+
+    <div style="margin: 18px 0;">
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search customer, phone, purpose, status..."
+            style="width: 100%; max-width: 420px; padding: 13px 14px; border-radius: 999px; border: 1px solid rgba(15,122,67,0.16); outline: none;"
+        >
+    </div>
+
+    <div class="table-wrap">
+        <table id="loanTable">
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Phone</th>
+                    <th>Amount</th>
+                    <th>Repayable</th>
+                    <th>Balance</th>
+                    <th>Duration</th>
+                    <th>Purpose</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for loan in loans %}
+                    <tr>
+                        <td>{{ loan.customer }}</td>
+                        <td>{{ loan.customer.phone|default:"N/A" }}</td>
+                        <td>{{ loan.amount_requested }}</td>
+                        <td>{{ loan.total_repayable }}</td>
+                        <td>{{ loan.balance }}</td>
+                        <td>{{ loan.duration_months }} month(s)</td>
+                        <td>{{ loan.purpose|truncatechars:60 }}</td>
+                        <td>
+                            {% if loan.status == 'pending' %}
+                                <span class="badge pending">Pending</span>
+                            {% elif loan.status == 'approved' %}
+                                <span class="badge approved">Loan Active</span>
+                            {% elif loan.status == 'rejected' %}
+                                <span class="badge rejected">Rejected</span>
+                            {% elif loan.status == 'overdue' %}
+                                <span class="badge overdue">Overdue</span>
+                            {% else %}
+                                <span class="badge">{{ loan.status|title }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ loan.created_at }}</td>
+                        <td>
+                            <div class="actions">
+                                <a href="{% url 'loan_detail' loan.id %}" class="action-btn">View</a>
+
+                                {% if request.user.role == 'admin' or request.user.role == 'management' %}
+                                    {% if loan.status == 'pending' %}
+                                        <a href="{% url 'approve_loan' loan.id %}" class="action-btn primary">Approve</a>
+                                        <a href="{% url 'reject_loan' loan.id %}" class="action-btn" style="color:#b91c1c;">Reject</a>
+                                    {% elif loan.status == 'approved' %}
+                                        <span class="badge approved">Loan Active</span>
+                                    {% elif loan.status == 'overdue' %}
+                                        <span class="badge overdue">Overdue</span>
+                                    {% else %}
+                                        <span class="activity-meta">No action</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="activity-meta">View only</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="10">No loan applications found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const searchInput = document.getElementById("searchInput");
+    const table = document.getElementById("loanTable");
+    const rows = table.querySelectorAll("tbody tr");
+
+    searchInput.addEventListener("keyup", function () {
+        const value = this.value.toLowerCase();
+
+        rows.forEach((row) => {
+            const text = row.innerText.toLowerCase();
+            row.style.display = text.includes(value) ? "" : "none";
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Susu Application | GBOMDIA{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div class="title-box">
+        <h1>Susu Application</h1>
+        <p>Register for a GBOMDIA digital Susu savings account.</p>
+    </div>
+
+    <div class="actions">
+        {% if request.user.role == 'customer' %}
+            <a href="{% url 'customer_dashboard' %}" class="action-btn primary">Back to Dashboard</a>
+        {% elif request.user.role == 'operator' %}
+            <a href="{% url 'operator_dashboard' %}" class="action-btn primary">Back to Operator</a>
+        {% else %}
+            <a href="{% url 'home' %}" class="action-btn primary">Back Home</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="panel">
+    <h2>Complete Susu Registration</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="quick-links">
+            {% for field in form %}
+                <div class="quick-link">
+                    <strong>{{ field.label }}</strong>
+                    <span>{{ field }}</span>
+                    {% if field.errors %}
+                        <span style="color:#b91c1c;">{{ field.errors }}</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div style="margin-top: 22px;">
+            <button type="submit" class="action-btn primary" style="border:none; cursor:pointer;">Submit Susu Application</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

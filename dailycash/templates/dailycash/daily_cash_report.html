@@ -1,0 +1,50 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Daily Cash Report | GBOMDIA{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div class="title-box">
+        <h1>Daily Business Cash Report</h1>
+        <p>Opening amount, income, expenses, balance, and profit generated daily.</p>
+    </div>
+</div>
+
+<div class="panel">
+    <h2>Cash Records</h2>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Staff</th>
+                    <th>Opening</th>
+                    <th>Income</th>
+                    <th>Expense</th>
+                    <th>Profit</th>
+                    <th>Balance</th>
+                    <th>Closing</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                    <tr>
+                        <td>{{ record.business_date }}</td>
+                        <td>{{ record.staff.username }}</td>
+                        <td>{{ record.opening_amount }}</td>
+                        <td>{{ record.total_income }}</td>
+                        <td>{{ record.total_expense }}</td>
+                        <td>{{ record.profit_generated }}</td>
+                        <td>{{ record.balance }}</td>
+                        <td>{{ record.closing_amount }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="8">No daily cash records yet.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

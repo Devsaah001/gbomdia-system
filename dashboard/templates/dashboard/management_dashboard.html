@@ -1,0 +1,123 @@
+{% extends "base_dashboard.html" %}
+{% block title %}{{ dashboard_title }}{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div class="title-box">
+        <h1>{{ dashboard_title }}</h1>
+        <p>
+            Business reports, approvals, customer records, inventory movement, and full system control
+            from one clean and professional administrative workspace.
+        </p>
+    </div>
+
+    <div class="actions">
+        <a href="{% url 'manage_loans' %}" class="action-btn">Manage Loans</a>
+        <a href="{% url 'manage_susu' %}" class="action-btn">Manage Susu</a>
+        <a href="{% url 'manage_payout_requests' %}" class="action-btn">Payout Requests</a>
+        <a href="{% url 'customer_list' %}" class="action-btn">Customers</a>
+        <a href="{% url 'inventory_home' %}" class="action-btn">Inventory</a>
+        <a href="{% url 'reports_home' %}" class="action-btn">Reports</a>
+        <a href="{% url 'notifications_home' %}" class="action-btn">Notifications</a>
+        <a href="{% url 'logout_page' %}" class="action-btn primary">Logout</a>
+    </div>
+</div>
+
+<div class="hero-panel">
+    <h2>Executive control center</h2>
+    <p>
+        Monitor loan approvals, Susu activity, payout requests, telecom services, inventory movement,
+        and reporting operations from one premium administrative dashboard built for speed, clarity, and control.
+    </p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card"><h3>Total Loans</h3><p>{{ total_loans }}</p></div>
+    <div class="stat-card"><h3>Approved Loans</h3><p>{{ approved_loans }}</p></div>
+    <div class="stat-card"><h3>Total Susu</h3><p>{{ total_susu }}</p></div>
+    <div class="stat-card"><h3>Total Transactions</h3><p>{{ total_transactions }}</p></div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card"><h3>Mobile Money</h3><p>{{ mobile_money_count }}</p></div>
+    <div class="stat-card"><h3>Orange Money</h3><p>{{ orange_money_count }}</p></div>
+    <div class="stat-card"><h3>LEC Payments</h3><p>{{ lec_payment_count }}</p></div>
+    <div class="stat-card"><h3>Telecom Services</h3><p>{{ telecom_service_count }}</p></div>
+</div>
+
+<div class="panel-grid">
+    <div class="panel">
+        <h2>Loan Summary</h2>
+        <p>Quick view of current loan workflow performance across the system.</p>
+        <div class="summary-row">
+            <div class="summary-pill">Pending: {{ pending_loans }}</div>
+            <div class="summary-pill">Approved: {{ approved_loans }}</div>
+            <div class="summary-pill">Rejected: {{ rejected_loans }}</div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h2>Susu Summary</h2>
+        <p>Track account progress and savings activity from one place.</p>
+        <div class="summary-row">
+            <div class="summary-pill">Pending: {{ pending_susu }}</div>
+            <div class="summary-pill">Active: {{ active_susu }}</div>
+            <div class="summary-pill">Rejected: {{ rejected_susu }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <h2>Admin Actions</h2>
+    <p>
+        Admin can approve or reject loans, monitor Susu accounts, review payout requests,
+        manage customers, supervise inventory, and review reports across all business operations.
+    </p>
+
+    <div class="quick-links">
+        <a href="{% url 'manage_loans' %}" class="quick-link">
+            <strong>Loan Approvals</strong>
+            <span>Review pending applications and make approval decisions professionally.</span>
+        </a>
+
+        <a href="{% url 'manage_payout_requests' %}" class="quick-link">
+            <strong>Payout Approvals</strong>
+            <span>Review and process Susu payout requests from the approval center.</span>
+        </a>
+
+        <a href="{% url 'manage_susu' %}" class="quick-link">
+            <strong>Susu Accounts</strong>
+            <span>Monitor active, pending, and rejected Susu accounts in one place.</span>
+        </a>
+
+        <a href="{% url 'customer_list' %}" class="quick-link">
+            <strong>Customer Directory</strong>
+            <span>View and manage customer records, profiles, and service access.</span>
+        </a>
+    </div>
+</div>
+
+<a href="{% url 'close_daily_cash' %}" class="action-btn">Close Daily Cash</a>
+<a href="{% url 'daily_cash_report' %}" class="action-btn">Cash Report</a>
+
+<div class="panel">
+    <h2>Recent Activities</h2>
+
+    {% for item in recent_activities %}
+        <div class="activity-item">
+            <div class="activity-title">
+                {{ item.get_action_display }}{% if item.customer_name %} - {{ item.customer_name }}{% endif %}
+            </div>
+            <div class="activity-meta">
+                Service: {{ item.get_service_type_display }} |
+                Status: {{ item.get_status_display }} |
+                Amount: {{ item.amount }} |
+                Ref: {{ item.reference|default:"N/A" }} |
+                {{ item.created_at }}
+            </div>
+        </div>
+    {% empty %}
+        <p class="activity-meta">No recent activities yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

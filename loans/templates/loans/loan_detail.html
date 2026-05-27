@@ -1,0 +1,110 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Loan Detail | GBOMDIA{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div class="title-box">
+        <h1>Loan Detail</h1>
+        <p>Complete applicant record, KYC information, guarantors, uploaded documents, and loan decision summary.</p>
+    </div>
+
+    <div class="actions">
+        {% if request.user.role == 'customer' %}
+            <a href="{% url 'my_loans' %}" class="action-btn primary">Back to My Loans</a>
+        {% else %}
+            <a href="{% url 'manage_loans' %}" class="action-btn primary">Back to Manage Loans</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="hero-panel">
+    <h2>Loan record overview</h2>
+    <p>
+        Review the full customer loan profile including KYC records, guarantor information,
+        uploaded documents, approval details, repayment values, and current status.
+    </p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card"><h3>Requested</h3><p>{{ loan.amount_requested|default:"0" }}</p></div>
+    <div class="stat-card"><h3>Approved</h3><p>{{ loan.amount_approved|default:"0" }}</p></div>
+    <div class="stat-card"><h3>Repayable</h3><p>{{ loan.total_repayable|default:"0" }}</p></div>
+    <div class="stat-card"><h3>Balance</h3><p>{{ loan.balance|default:"0" }}</p></div>
+</div>
+
+<div class="panel-grid">
+    <div class="panel">
+        <h2>Loan Summary</h2>
+        <p><strong>Customer:</strong> {{ loan.customer }}</p>
+        <p><strong>Status:</strong> {{ loan.status|title }}</p>
+        <p><strong>Duration:</strong> {{ loan.duration_months }} month(s)</p>
+        <p><strong>Interest Rate:</strong> {{ loan.interest_rate }}%</p>
+        <p><strong>Purpose:</strong> {{ loan.purpose }}</p>
+        <p><strong>Created:</strong> {{ loan.created_at }}</p>
+        <p><strong>Approved By:</strong> {{ loan.approved_by|default:"N/A" }}</p>
+        <p><strong>Approved Date:</strong> {{ loan.approved_at|default:"N/A" }}</p>
+    </div>
+
+    <div class="panel">
+        <h2>Applicant Information</h2>
+        <p><strong>Full Name:</strong> {{ loan.customer.first_name }} {{ loan.customer.last_name }}</p>
+        <p><strong>Phone:</strong> {{ loan.customer.phone }}</p>
+        <p><strong>Email:</strong> {{ loan.customer.email|default:"N/A" }}</p>
+        <p><strong>Occupation:</strong> {{ loan.occupation|default:"N/A" }}</p>
+        <p><strong>Address:</strong> {{ loan.address|default:"N/A" }}</p>
+        <p><strong>Employment:</strong> {{ loan.employment_status|default:"N/A" }}</p>
+        <p><strong>Employer / Business:</strong> {{ loan.employer_or_business_name|default:"N/A" }}</p>
+        <p><strong>Monthly Income:</strong> {{ loan.monthly_income|default:"N/A" }}</p>
+    </div>
+</div>
+
+<div class="panel-grid">
+    <div class="panel">
+        <h2>KYC Information</h2>
+        <p><strong>ID Type:</strong> {{ loan.id_type|default:"N/A" }}</p>
+        <p><strong>ID Number:</strong> {{ loan.id_number|default:"N/A" }}</p>
+        <p><strong>Collateral:</strong> {{ loan.collateral_description|default:"N/A" }}</p>
+        <p><strong>Admin Note:</strong> {{ loan.admin_note|default:"N/A" }}</p>
+    </div>
+
+    <div class="panel">
+        <h2>Uploaded Documents</h2>
+
+        {% if loan.applicant_photo %}
+            <p><a href="{{ loan.applicant_photo.url }}" target="_blank" class="action-btn">Open Applicant Photo</a></p>
+        {% endif %}
+
+        {% if loan.id_document_photo %}
+            <p><a href="{{ loan.id_document_photo.url }}" target="_blank" class="action-btn">Open ID Document</a></p>
+        {% endif %}
+
+        {% if loan.collateral_document %}
+            <p><a href="{{ loan.collateral_document.url }}" target="_blank" class="action-btn">Open Collateral File</a></p>
+        {% endif %}
+
+        {% if not loan.applicant_photo and not loan.id_document_photo and not loan.collateral_document %}
+            <p>No uploaded files available.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="panel-grid">
+    <div class="panel">
+        <h2>Guarantor 1</h2>
+        <p><strong>Name:</strong> {{ loan.guarantor1_full_name|default:"N/A" }}</p>
+        <p><strong>Phone:</strong> {{ loan.guarantor1_phone|default:"N/A" }}</p>
+        <p><strong>Occupation:</strong> {{ loan.guarantor1_occupation|default:"N/A" }}</p>
+        <p><strong>Relationship:</strong> {{ loan.guarantor1_relationship|default:"N/A" }}</p>
+        <p><strong>Address:</strong> {{ loan.guarantor1_address|default:"N/A" }}</p>
+    </div>
+
+    <div class="panel">
+        <h2>Guarantor 2</h2>
+        <p><strong>Name:</strong> {{ loan.guarantor2_full_name|default:"N/A" }}</p>
+        <p><strong>Phone:</strong> {{ loan.guarantor2_phone|default:"N/A" }}</p>
+        <p><strong>Occupation:</strong> {{ loan.guarantor2_occupation|default:"N/A" }}</p>
+        <p><strong>Relationship:</strong> {{ loan.guarantor2_relationship|default:"N/A" }}</p>
+        <p><strong>Address:</strong> {{ loan.guarantor2_address|default:"N/A" }}</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends "base_dashboard.html" %}
+{% block title %}{{ dashboard_title }}{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div class="title-box">
+        <h1>{{ dashboard_title }}</h1>
+        <p>
+            General working system for daily operations, customer support, and office service handling
+            in one clean operator workspace.
+        </p>
+    </div>
+
+    <div class="actions">
+        <a href="{% url 'manage_loans' %}" class="action-btn">View Loans</a>
+        <a href="{% url 'manage_susu' %}" class="action-btn">View Susu</a>
+        <a href="{% url 'manage_payout_requests' %}" class="action-btn">Payout Requests</a>
+        <a href="{% url 'logout_page' %}" class="action-btn primary">Logout</a>
+    </div>
+</div>
+
+<div class="hero-panel">
+    <h2>Daily operations center</h2>
+    <p>
+        Register customers, submit loan applications, manage Susu registration, record services,
+        and monitor daily office activity while approvals remain under Admin and Management control.
+    </p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card"><h3>Total Loans</h3><p>{{ total_loans }}</p></div>
+    <div class="stat-card"><h3>Pending Loans</h3><p>{{ pending_loans }}</p></div>
+    <div class="stat-card"><h3>Total Transactions</h3><p>{{ total_transactions }}</p></div>
+    <div class="stat-card"><h3>Total Susu</h3><p>{{ total_susu }}</p></div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card"><h3>Active Susu</h3><p>{{ active_susu }}</p></div>
+    <div class="stat-card"><h3>Mobile Money</h3><p>{{ mobile_money_count }}</p></div>
+    <div class="stat-card"><h3>Orange Money</h3><p>{{ orange_money_count }}</p></div>
+    <div class="stat-card"><h3>LEC Payments</h3><p>{{ lec_payment_count }}</p></div>
+</div>
+
+<div class="panel">
+    <h2>Operator Actions</h2>
+    <p>Use this section for day-to-day customer support and front office operations.</p>
+
+    <div class="quick-links">
+        <a href="{% url 'customer_list' %}" class="quick-link">
+            <strong>Customer Directory</strong>
+            <span>View customer records and service access.</span>
+        </a>
+
+        <a href="{% url 'office_apply_loan' %}" class="quick-link">
+            <strong>Apply Loan for Customer</strong>
+            <span>Submit a new loan request on behalf of a customer from the office desk.</span>
+        </a>
+
+        <a href="{% url 'office_register_susu' %}" class="quick-link">
+            <strong>Register Susu Customer</strong>
+            <span>Create a Susu account and begin savings registration professionally.</span>
+        </a>
+
+        <a href="{% url 'manage_susu' %}" class="quick-link">
+            <strong>Manage Susu Accounts</strong>
+            <span>Check account records, balances, and activity from the Susu section.</span>
+        </a>
+    </div>
+</div>
+
+<div class="panel">
+    <h2>Daily Work</h2>
+    <p>
+        The operator can register customers, submit loan requests, create Susu accounts,
+        request payouts, record services, and monitor daily office activity.
+    </p>
+
+    <div class="quick-links">
+        <a href="{% url 'record_service' %}" class="quick-link">
+            <strong>Record Services</strong>
+            <span>Log office services and maintain operational records properly.</span>
+        </a>
+
+        <a href="{% url 'my_activities' %}" class="quick-link">
+            <strong>View Daily Activities</strong>
+            <span>Track your service logs, actions, and daily office records.</span>
+        </a>
+    </div>
+</div>
+
+
+<a href="{% url 'close_daily_cash' %}" class="action-btn">Close Daily Cash</a>
+<a href="{% url 'daily_cash_report' %}" class="action-btn">Cash Report</a>
+
+<div class="panel">
+    <h2>My Recent Activities</h2>
+
+    {% for item in my_daily_activities %}
+        <div class="activity-item">
+            <div class="activity-title">
+                {{ item.get_action_display }}{% if item.customer_name %} - {{ item.customer_name }}{% endif %}
+            </div>
+            <div class="activity-meta">
+                Service: {{ item.get_service_type_display }} |
+                Status: {{ item.get_status_display }} |
+                Amount: {{ item.amount }} |
+                Ref: {{ item.reference|default:"N/A" }} |
+                {{ item.created_at }}
+            </div>
+        </div>
+    {% empty %}
+        <p class="activity-meta">No recent activities yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

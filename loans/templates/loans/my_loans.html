@@ -1,0 +1,66 @@
+{% extends "base_dashboard.html" %}
+{% block title %}My Loans | GBOMDIA{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div class="title-box">
+        <h1>My Loans</h1>
+        <p>Track your loan applications, approval status, total repayable amount, and current balance.</p>
+    </div>
+
+    <div class="actions">
+        <a href="{% url 'customer_dashboard' %}" class="action-btn">Dashboard</a>
+        <a href="{% url 'apply_loan' %}" class="action-btn primary">Apply New Loan</a>
+    </div>
+</div>
+
+<div class="panel">
+    <h2>Loan Records</h2>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Repayable</th>
+                    <th>Balance</th>
+                    <th>Duration</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>View</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for loan in loans %}
+                    <tr>
+                        <td>{{ loan.amount_requested }}</td>
+                        <td>{{ loan.total_repayable }}</td>
+                        <td>{{ loan.balance }}</td>
+                        <td>{{ loan.duration_months }} month(s)</td>
+                        <td>
+                            {% if loan.status == 'pending' %}
+                                <span class="badge pending">Pending</span>
+                            {% elif loan.status == 'approved' %}
+                                <span class="badge approved">Loan Active</span>
+                            {% elif loan.status == 'rejected' %}
+                                <span class="badge rejected">Rejected</span>
+                            {% elif loan.status == 'overdue' %}
+                                <span class="badge overdue">Overdue</span>
+                            {% else %}
+                                <span class="badge">{{ loan.status|title }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ loan.created_at }}</td>
+                        <td><a href="{% url 'loan_detail' loan.id %}" class="action-btn">Detail</a></td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7">You have not submitted any loan application yet.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

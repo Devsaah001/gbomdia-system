@@ -1,0 +1,105 @@
+{% extends "base_dashboard.html" %}
+{% block title %}GBOMDIA | Customer Dashboard{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div class="title-box">
+        <h1>My Dashboard</h1>
+        <p>
+            Welcome back, {{ request.user.first_name|default:request.user.username }}.
+            Manage your loans, Susu accounts, and account activity from one clean and secure workspace.
+        </p>
+    </div>
+
+    <div class="actions">
+        <a href="{% url 'home' %}" class="action-btn">Website</a>
+        <a href="{% url 'logout_page' %}" class="action-btn primary">Logout</a>
+    </div>
+</div>
+
+<div class="hero-panel">
+    <h2>Your services in one place</h2>
+    <p>
+        Apply for loans, track your applications, manage your Susu accounts, and stay connected
+        to your GBOMDIA customer profile through a smoother and more organized dashboard.
+    </p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3>Total Loans</h3>
+        <p>{{ total_loans|default:"0" }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>Susu Accounts</h3>
+        <p>{{ total_susu|default:"0" }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>Profile Status</h3>
+        <p>Active</p>
+    </div>
+    <div class="stat-card">
+        <h3>Access Level</h3>
+        <p>Secure</p>
+    </div>
+</div>
+
+<div class="panel">
+    <h2>Quick Actions</h2>
+    <p>
+        Choose any service below to continue your loan or savings activities quickly.
+    </p>
+
+    <div class="quick-links">
+        <a href="{% url 'apply_loan' %}" class="quick-link">
+            <strong>Apply for Loan</strong>
+            <span>Submit a new loan application with your information and supporting details.</span>
+        </a>
+
+        <a href="{% url 'my_loans' %}" class="quick-link">
+            <strong>My Loans</strong>
+            <span>Track your past and current loan requests, approvals, and application statuses.</span>
+        </a>
+
+        <a href="{% url 'apply_susu' %}" class="quick-link">
+            <strong>Apply for Susu</strong>
+            <span>Register for a Susu savings account and begin your savings journey with GBOMDIA.</span>
+        </a>
+
+        <a href="{% url 'my_susu' %}" class="quick-link">
+            <strong>My Susu</strong>
+            <span>View your Susu balances, account progress, and savings account details.</span>
+        </a>
+    </div>
+</div>
+
+<div class="panel-grid">
+    <div class="panel">
+        <h2>Account Notice</h2>
+        <p>
+            Your customer profile is active. Loan approvals, payout decisions, and sensitive account actions
+            are reviewed and updated by authorized GBOMDIA staff.
+        </p>
+    </div>
+
+    <div class="panel">
+        <h2>Customer Support</h2>
+        <p>
+            If you need help with your loan application, Susu account, or GBOMDIA service activity,
+            contact support through the official channels below.
+        </p>
+
+        <div class="quick-links">
+            <a href="mailto:support@gbomdia.com" class="quick-link">
+                <strong>Email Support</strong>
+                <span>Send an email to support@gbomdia.com for official assistance.</span>
+            </a>
+
+            <a href="https://wa.me/231888231402" target="_blank" class="quick-link">
+                <strong>WhatsApp Support</strong>
+                <span>Chat with GBOMDIA support on WhatsApp: +231 888 231 402.</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

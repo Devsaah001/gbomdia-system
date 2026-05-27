@@ -1,0 +1,426 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GBOMDIA Enterprise Inc.{% endblock %}</title>
+
+    <style>
+        :root {
+            --green-dark: #0f7a43;
+            --green: #16b86a;
+            --green-soft: #34b79f;
+            --gold: #d4a11e;
+            --blue: #114c8d;
+            --cream: #f8f6ef;
+            --text: #163127;
+            --muted: #5f7468;
+            --white: #ffffff;
+            --shadow: 0 18px 40px rgba(0,0,0,0.10);
+            --radius-xl: 28px;
+            --radius-lg: 22px;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(180deg, #eef7f1 0%, #f8fbf8 100%);
+            color: var(--text);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(248, 246, 239, 0.94);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(15, 122, 67, 0.08);
+        }
+
+        .nav {
+            max-width: 1220px;
+            margin: 0 auto;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand img {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+        }
+
+        .brand-text h1 {
+            margin: 0;
+            font-size: 22px;
+            color: var(--green-dark);
+            line-height: 1;
+        }
+
+        .brand-text p {
+            margin: 4px 0 0;
+            font-size: 12px;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            color: var(--text);
+            padding: 10px 14px;
+            border-radius: 999px;
+            transition: 0.25s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(15, 122, 67, 0.08);
+            color: var(--green-dark);
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, var(--green), var(--blue)) !important;
+            color: var(--cream) !important;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(17, 76, 141, 0.14);
+        }
+
+        .signup-btn {
+            background: rgba(212,161,30,0.16) !important;
+            color: var(--green-dark) !important;
+            font-weight: 700;
+        }
+
+        .page-wrap {
+            max-width: 1220px;
+            margin: 0 auto;
+            padding: 28px 20px 72px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--green) 0%, var(--green-soft) 45%, var(--blue) 100%);
+            color: var(--cream);
+            border-radius: var(--radius-xl);
+            padding: 60px 42px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 28px;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: -80px;
+            right: -30px;
+            width: 290px;
+            height: 220px;
+            background: radial-gradient(circle at center, rgba(248,246,239,0.34), rgba(248,246,239,0.08));
+            border-radius: 42% 58% 68% 32% / 42% 48% 60% 52%;
+            animation: floatSoft 7s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            bottom: -40px;
+            left: -20px;
+            width: 180px;
+            height: 110px;
+            background: radial-gradient(circle at center, rgba(212,161,30,0.28), rgba(248,246,239,0.06));
+            border-radius: 50%;
+            animation: floatSoft 8s ease-in-out infinite reverse;
+        }
+
+        .hero-grid {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            margin-bottom: 14px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: var(--cream);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .hero h2 {
+            margin: 0 0 16px;
+            font-size: clamp(34px, 5vw, 58px);
+            line-height: 1.04;
+            letter-spacing: -0.03em;
+        }
+
+        .hero p {
+            margin: 0 0 24px;
+            font-size: 16px;
+            line-height: 1.8;
+            max-width: 680px;
+            color: rgba(248,246,239,0.94);
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 18px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.25s ease;
+        }
+
+        .btn-primary {
+            background: var(--cream);
+            color: var(--blue);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: var(--cream);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .hero-image {
+            text-align: center;
+        }
+
+        .hero-image img {
+            width: 100%;
+            max-width: 360px;
+            object-fit: contain;
+            filter: drop-shadow(0 14px 28px rgba(0,0,0,0.18));
+        }
+
+        .section-card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            margin: 0 0 10px;
+            font-size: 32px;
+            color: var(--green-dark);
+        }
+
+        .section-subtitle {
+            margin: 0 0 20px;
+            color: var(--muted);
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .feature-card, .blog-card {
+            background: linear-gradient(180deg, #ffffff 0%, #f7fbf8 100%);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            border: 1px solid rgba(15, 122, 67, 0.08);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+            transition: 0.25s ease;
+        }
+
+        .feature-card:hover, .blog-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .feature-card h3, .blog-card h3 {
+            margin: 0 0 10px;
+            font-size: 20px;
+            color: var(--blue);
+        }
+
+        .feature-card p, .blog-card p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.75;
+            font-size: 14px;
+        }
+
+        .image-panel {
+            background: linear-gradient(135deg, rgba(22,184,106,0.12), rgba(17,76,141,0.10));
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .image-panel img {
+            width: 100%;
+            max-width: 420px;
+            border-radius: 22px;
+            object-fit: cover;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.10);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 28px 16px 40px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .reveal.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes floatSoft {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(10px); }
+        }
+
+        @media (max-width: 960px) {
+            .hero-grid,
+            .grid-3,
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 40px 24px;
+            }
+
+            .nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .page-wrap {
+                padding: 18px 12px 56px;
+            }
+
+            .section-card {
+                padding: 22px 18px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .brand img {
+                width: 48px;
+                height: 48px;
+            }
+
+            .brand-text h1 {
+                font-size: 19px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="nav">
+            <a href="{% url 'home' %}" class="brand">
+                <img src="{% static 'images/logo.png' %}" alt="GBOMDIA Logo">
+                <div class="brand-text">
+                    <h1>GBOMDIA</h1>
+                    <p>Enterprise Inc.</p>
+                </div>
+            </a>
+
+            <nav class="nav-links">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'about_page' %}">About</a>
+                <a href="{% url 'services_page' %}">Services</a>
+                <a href="{% url 'blog_page' %}">Blog</a>
+                <a href="{% url 'signup_page' %}" class="signup-btn">Sign Up</a>
+                <a href="{% url 'login_page' %}" class="login-btn">Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-wrap">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        © 2026 GBOMDIA Enterprise Inc. All rights reserved.
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("show");
+                }
+            });
+        }, { threshold: 0.12 });
+
+        window.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+        });
+    </script>
+</body>
+</html>

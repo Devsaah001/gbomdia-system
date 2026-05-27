@@ -1,0 +1,47 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Inventory | GBOMDIA{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div class="title-box">
+        <h1>Inventory Center</h1>
+        <p>View basic inventory items and stock records.</p>
+    </div>
+
+    <div class="actions">
+        <a href="{% url 'admin_dashboard' %}" class="action-btn primary">Back to Admin</a>
+    </div>
+</div>
+
+<div class="panel">
+    <h2>Inventory Items</h2>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Note</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in items %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.note|default:"N/A" }}</td>
+                        <td>{{ item.created_at }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No inventory items yet. Add items from Django admin.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

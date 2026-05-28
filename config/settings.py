@@ -13,6 +13,7 @@ DEBUG = False
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
+    "gbomdia-system.onrender.com",
     "gbomdia.com",
     "www.gbomdia.com",
 ]

@@ -117,27 +117,30 @@ class LoanApplication(models.Model):
         monthly_interest_rate = Decimal("0.15")
 
         if self.amount_requested and self.duration_months:
-            self.interest_rate = Decimal("15.00")
+           self.interest_rate = Decimal("15.00")
 
-            interest_amount = (
-                self.amount_requested
-                * monthly_interest_rate
-                * Decimal(self.duration_months)
-            )
+           interest_amount = (
+               self.amount_requested *
+               monthly_interest_rate *
+               Decimal(self.duration_months)
+           )
 
-            self.total_repayable = self.amount_requested + interest_amount
+           self.total_repayable = self.amount_requested + interest_amount
 
-            if not self.amount_approved or self.amount_approved == Decimal("0.00"):
-                self.amount_approved = self.amount_requested
+           if not self.amount_approved or self.amount_approved == Decimal("0.00"):
+               self.amount_approved = self.amount_requested
 
-            if not self.balance or self.balance == Decimal("0.00"):
-                self.balance = self.total_repayable
+           if not self.balance or self.balance == Decimal("0.00"):
+               self.balance = self.total_repayable
 
-        if self.status in ["approved", "disbursed"] and self.created_at and self.duration_months:
-            due_date = self.created_at + timedelta(days=int(self.duration_months) * 30)
+        if self.status == "approved":
+           self.status = "disbursed"
 
-            if timezone.now() > due_date and self.balance and self.balance > 0:
-                self.status = "overdue"
+        if self.status == "disbursed" and self.approved_at and self.duration_months:
+           due_date = self.approved_at + timedelta(days=int(self.duration_months) * 30)
+
+           if timezone.now() > due_date and self.balance > 0:
+            self.status = "overdue"
 
         super().save(*args, **kwargs)
 

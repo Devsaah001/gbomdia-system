@@ -9,7 +9,17 @@
     </div>
 
     <div class="actions">
-        <a href="{% url 'admin_dashboard' %}" class="action-btn primary">Back to Admin</a>
+        {% if request.user.role == "admin" %}
+            <a href="{% url 'admin_dashboard' %}" class="action-btn primary">Back to Admin Dashboard</a>
+        {% elif request.user.role == "management" %}
+            <a href="{% url 'management_dashboard' %}" class="action-btn primary">Back to Management Dashboard</a>
+        {% elif request.user.role == "operator" %}
+            <a href="{% url 'operator_dashboard' %}" class="action-btn primary">Back to Operator Dashboard</a>
+        {% elif request.user.role == "customer" %}
+            <a href="{% url 'customer_dashboard' %}" class="action-btn primary">Back to Customer Dashboard</a>
+        {% else %}
+            <a href="/" class="action-btn primary">Back Home</a>
+       {% endif %}
     </div>
 </div>
 
